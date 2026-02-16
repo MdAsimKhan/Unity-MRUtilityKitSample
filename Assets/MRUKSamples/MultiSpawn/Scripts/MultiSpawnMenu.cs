@@ -88,6 +88,11 @@ namespace Meta.XR.MRUtilityKitSamples.FindMultiSpawn
 
         public void StartSpawningTargets()
         {
+            if (_remainingTargets != 0)
+            {
+                return;
+            }
+
             foreach (var spawner in _findSpawnPositions)
             {
                 spawner.StartSpawn(MRUK.Instance.GetCurrentRoom());

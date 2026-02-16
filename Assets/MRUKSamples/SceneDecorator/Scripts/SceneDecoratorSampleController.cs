@@ -74,22 +74,25 @@ namespace Meta.XR.MRUtilityKitSamples.SceneDecoratorSample
             keysPressed.Add(KeyCode.H, DecorationWalls);
             keysPressed.Add(KeyCode.J, DecorationDesk);
             keysPressed.Add(KeyCode.K, AllDecorations);
+
+            if (MRUK.Instance != null)
+            {
+                MRUK.Instance.RoomCreatedEvent.AddListener(ReceiveCreatedRoom);
+                MRUK.Instance.RoomRemovedEvent.AddListener(ReceiveRemovedRoom);
+                MRUK.Instance.RoomUpdatedEvent.AddListener(ReceiveUpdatedRoom);
+                MRUK.Instance.SceneLoadedEvent.AddListener(UpdateAfterEvent);
+            }
         }
 
-        private void OnEnable()
+        private void OnDestroy()
         {
-            MRUK.Instance.RoomCreatedEvent.AddListener(ReceiveCreatedRoom);
-            MRUK.Instance.RoomRemovedEvent.AddListener(ReceiveRemovedRoom);
-            MRUK.Instance.RoomUpdatedEvent.AddListener(ReceiveUpdatedRoom);
-            MRUK.Instance.SceneLoadedEvent.AddListener(UpdateAfterEvent);
-        }
-
-        private void OnDisable()
-        {
-            MRUK.Instance.RoomCreatedEvent.RemoveListener(ReceiveCreatedRoom);
-            MRUK.Instance.RoomRemovedEvent.RemoveListener(ReceiveRemovedRoom);
-            MRUK.Instance.RoomUpdatedEvent.RemoveListener(ReceiveUpdatedRoom);
-            MRUK.Instance.SceneLoadedEvent.RemoveListener(UpdateAfterEvent);
+            if (MRUK.Instance != null)
+            {
+                MRUK.Instance.RoomCreatedEvent.RemoveListener(ReceiveCreatedRoom);
+                MRUK.Instance.RoomRemovedEvent.RemoveListener(ReceiveRemovedRoom);
+                MRUK.Instance.RoomUpdatedEvent.RemoveListener(ReceiveUpdatedRoom);
+                MRUK.Instance.SceneLoadedEvent.RemoveListener(UpdateAfterEvent);
+            }
         }
 
         private void ReceiveCreatedRoom(MRUKRoom room)
