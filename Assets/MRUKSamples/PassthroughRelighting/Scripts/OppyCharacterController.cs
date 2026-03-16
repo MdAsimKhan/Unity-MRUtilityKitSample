@@ -1,6 +1,7 @@
 // Copyright (c) Meta Platforms, Inc. and affiliates.
 
 using System.Collections;
+using Meta.XR.MRUtilityKit;
 using Meta.XR.Samples;
 using UnityEngine;
 
@@ -79,7 +80,18 @@ namespace Meta.XR.MRUtilityKitSamples.PassthroughRelighting
             }
 
             _characterController.enabled = false;
-            transform.position = respawnTransform.position + respawnTransform.forward * 0.3f;
+            if (MRUK.Instance != null)
+            {
+                if (MRUK.Instance.GetCurrentRoom().IsPositionInRoom(respawnTransform.position))
+                {
+                    transform.position = respawnTransform.position + respawnTransform.forward * 0.3f;
+                }
+
+                else
+                {
+                    transform.position = MRUK.Instance.GetCurrentRoom().GetRoomBounds().center;
+                }
+            }
             _characterController.enabled = true;
         }
 

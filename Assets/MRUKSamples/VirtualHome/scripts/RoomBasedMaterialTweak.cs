@@ -8,6 +8,9 @@ using UnityEngine;
 
 namespace Meta.XR.MRUtilityKitSamples.VirtualHome
 {
+    /// <summary>
+    /// Tweaks material properties based on room dimensions to create distance-based gradient effects.
+    /// </summary>
     [MetaCodeSample("MRUKSample-VirtualHome")]
     public class RoomBasedMaterialTweak : MonoBehaviour
     {
@@ -17,7 +20,7 @@ namespace Meta.XR.MRUtilityKitSamples.VirtualHome
         {
             if (MRUK.Instance != null)
             {
-                MRUK.Instance.SceneLoadedEvent.AddListener(StartTweakingCoroutine);
+                MRUK.Instance.SceneLoadedEvent.AddListener(StartTweakingAsync);
             }
         }
 
@@ -25,44 +28,62 @@ namespace Meta.XR.MRUtilityKitSamples.VirtualHome
         {
             if (MRUK.Instance != null)
             {
-                MRUK.Instance.SceneLoadedEvent.RemoveListener(StartTweakingCoroutine);
+                MRUK.Instance.SceneLoadedEvent.RemoveListener(StartTweakingAsync);
             }
         }
 
-        public async void StartTweakingCoroutine()
+        /// <summary>
+        /// Starts the asynchronous process of tweaking material gradients based on room dimensions.
+        /// This method is invoked when the scene is loaded.
+        /// </summary>
+        public async void StartTweakingAsync()
         {
             try
             {
                 await TweakDistanceBasedGradient();
             }
+            catch (InvalidOperationException e)
+            {
+                Debug.LogError($"Failed to tweak distance based gradient. Ensure MRUK is initialized and a room is available. Error: {e.Message}");
+            }
             catch (Exception e)
             {
-                Debug.LogError("Something went wrong trying to tweak distance based gradient: " + e.Message);
+                Debug.LogError($"Unexpected error while tweaking distance based gradient: {e.Message}");
             }
         }
 
-        private Task TweakDistanceBasedGradient()
+        /// <summary>
+        /// Tweaks the distance-based gradient on all mesh renderers by interpolating material properties
+        /// based on the current room's dimensions over time.
+        /// </summary>
+        private async Task TweakDistanceBasedGradient()
         {
-            var roomBounds = MRUK.Instance.GetCurrentRoom().GetRoomBounds();
+            var currentRoom = MRUK.Instance.GetCurrentRoom();
+            if (currentRoom == null)
+            {
+                Debug.LogError("Cannot tweak distance based gradient: No current room available. Ensure a room has been loaded.");
+                return;
+            }
+
+            var roomBounds = currentRoom.GetRoomBounds();
             var roomSize = Mathf.Max(roomBounds.size.x, roomBounds.size.z);
             var roomSizeVec = new Vector2(0, roomSize);
-            var AllMeshes = FindObjectsByType<MeshRenderer>(FindObjectsInactive.Exclude, FindObjectsSortMode.None);
+            var allMeshes = FindObjectsByType<MeshRenderer>(FindObjectsInactive.Exclude, FindObjectsSortMode.None);
             float t = 0;
             while (t < 1)
             {
-                foreach (var mr in AllMeshes)
+                foreach (var meshRenderer in allMeshes)
                 {
-                    if (mr.material.HasProperty(DistanceCovered))
+                    if (meshRenderer.material.HasProperty(DistanceCovered))
                     {
-                        mr.material.SetVector(DistanceCovered,
-                            Vector2.Lerp(mr.material.GetVector(DistanceCovered), roomSizeVec, t));
+                        meshRenderer.material.SetVector(DistanceCovered,
+                            Vector2.Lerp(meshRenderer.material.GetVector(DistanceCovered), roomSizeVec, t));
                     }
                 }
 
                 t += Time.deltaTime;
+                await Task.Yield();
             }
-
-            return Task.CompletedTask;
         }
     }
 }

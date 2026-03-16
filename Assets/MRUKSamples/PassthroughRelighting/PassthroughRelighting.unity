@@ -1622,6 +1622,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   SpawnOnStart: 2
   MeshMaterial: {fileID: 2100000, guid: 69e54be2e702f984683fa4816dc4b0f8, type: 2}
+  BarycentricCoordinatesEnabled: 0
   Colliders: 1
   CutHoles: 0
   castShadows: 0
@@ -1802,6 +1803,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   SpawnOnStart: 0
   MeshMaterial: {fileID: 2100000, guid: 69e54be2e702f984683fa4816dc4b0f8, type: 2}
+  BarycentricCoordinatesEnabled: 0
   Colliders: 1
   CutHoles: 0
   castShadows: 0
@@ -2371,7 +2373,8 @@ PrefabInstance:
       value: Oppy
       objectReference: {fileID: 0}
     m_RemovedComponents: []
-    m_RemovedGameObjects: []
+    m_RemovedGameObjects:
+    - {fileID: 996504430581290861, guid: bd8120e4a733d1b4ab18fbeb92853d5a, type: 3}
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: bd8120e4a733d1b4ab18fbeb92853d5a, type: 3}
@@ -2397,11 +2400,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a54ec9d2b3a0a0749aa13a2bca162e54, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!1 &1676643477 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 996504430581290861, guid: bd8120e4a733d1b4ab18fbeb92853d5a, type: 3}
-  m_PrefabInstance: {fileID: 1676643473}
-  m_PrefabAsset: {fileID: 0}
 --- !u!137 &1676643478 stripped
 SkinnedMeshRenderer:
   m_CorrespondingSourceObject: {fileID: 7566023711475099266, guid: bd8120e4a733d1b4ab18fbeb92853d5a, type: 3}
@@ -3285,14 +3283,10 @@ PrefabInstance:
     - target: {fileID: 2624990573474107923, guid: 6959df8b2bb5b6f418b16708262cbcf2, type: 3}
       propertyPath: _blobShadowProjector
       value: 
-      objectReference: {fileID: 1676643477}
+      objectReference: {fileID: 0}
     - target: {fileID: 2624990573474107924, guid: 6959df8b2bb5b6f418b16708262cbcf2, type: 3}
       propertyPath: m_Name
       value: DebugPanel
-      objectReference: {fileID: 0}
-    - target: {fileID: 2624990573474107925, guid: 6959df8b2bb5b6f418b16708262cbcf2, type: 3}
-      propertyPath: m_RootOrder
-      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2624990573474107925, guid: 6959df8b2bb5b6f418b16708262cbcf2, type: 3}
       propertyPath: m_LocalPosition.x
